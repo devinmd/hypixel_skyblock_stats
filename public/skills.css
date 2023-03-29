@@ -1,0 +1,42 @@
+#content #skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  row-gap: 16px;
+}
+
+#content #skills .skill-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#content #skills .skill-container .skill-name-container {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 4px;
+}
+
+#content #skills .skill-container .skill-name-container img{
+  height: 24px;
+  width: 24px;
+
+}
+
+#content #skills .skill-container .skill-name-container h4 {
+  margin: 0;
+}
+
+#content #skills .skill-container .bar {
+  width: 100%;
+  background-color: var(--gray);
+  border-radius: 16px;
+  height: 8px;
+}
+
+#content #skills .skill-container .bar-fill {
+  background-color: var(--green);
+  border-radius: 16px;
+  height: 8px;
+}

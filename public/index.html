@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>hypixel api</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="skills.css">
+	<link rel="stylesheet" href="nav.css">
+
+
+
+</head>
+
+<body>
+
+	<div id="app">
+
+		<div id="sidenav">
+
+			<p>Test</p>
+			<button>Skills</button>
+			<button>Collecions</button>
+			<button>Minions</button>
+
+		</div>
+
+		<div id="topnav">
+			<div id="input">
+				<input type="text" placeholder="Username" id="user-input">
+				<button onclick='requestUserData();'>Submit</button>
+			</div>
+			<p id="username"></p>
+
+			<p>on</p>
+			<select id="profile-selector" oninput="selectProfile()"></select>
+		</div>
+
+
+		<div id="content">
+			
+			<img src="assets/brewing_stand.png">
+			<p id="network-level">Network Level: 0</p>
+
+			<p id="karma">Karma: 0</p>
+
+			<img src="assets/diamond.png">
+			<p id="achievement-points">Achievement Points: 0</p>
+
+
+			<p id="last-session">Last Session:</p>
+			<p id="current-game"></p>
+
+			<img src="assets/bank.png">
+			<p id="bank">Bank: 0</p>
+
+			<img src="assets/coin.png">
+			<p id="purse">Coin Purse: 0</p>
+
+			<img src="assets/fairy_soul.png">
+			<p id="fairy-souls">Fairy Souls: 0</p>
+
+
+			<h1>Skills</h1>
+			<div id="skills"></div>
+
+			<h1>Collections</h1>
+			<div id="collections"></div>
+
+
+			<h1>Minions</h1>
+			<div id="minions"></div>
+		</div>
+	</div>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="./images.js"></script>
+	<script src="./locations.js"></script>
+
+	<script src="./script.js"></script>
+
+
+
+</body>
+
+</html>
