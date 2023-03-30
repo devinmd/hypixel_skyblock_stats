@@ -13,12 +13,11 @@ const port = 5050;
 
 const fs = require("fs");
 
-require('dotenv').config();
-
+require("dotenv").config();
 
 const key = process.env.KEY;
 
-const dev = false;
+const dev = true;
 
 // send index.html
 app.get("/", function (req, res) {
@@ -91,6 +90,10 @@ function fetchUser(s, username) {
     fs.readFile("./temp/player.json", "utf-8", (err, data2) => {
       s.emit("network_data", JSON.parse(data2), { uuid: data.id, username: username });
     });
+
+    fs.readFile("./temp/status.json", "utf-8", (err, data3) => {
+      s.emit("status", JSON.parse(data3), { uuid: data.id, username: username });
+    });
   } else {
     fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`)
       .then((res) => res.json())
@@ -109,7 +112,7 @@ function fetchUser(s, username) {
             s.emit("network_data", data2, { uuid: data.id, username: username });
           });
 
-          fetch(`https://api.hypixel.net/status?uuid=${data.id}&key=${key}`)
+        fetch(`https://api.hypixel.net/status?uuid=${data.id}&key=${key}`)
           .then((res3) => res3.json())
           .then((data3) => {
             console.log(`fetched hypixel status for minecraft user ${username}`);

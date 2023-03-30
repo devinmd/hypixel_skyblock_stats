@@ -1,7 +1,6 @@
 #content #skills {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  row-gap: 16px;
 }
 
 #content #skills .skill-container {
@@ -18,14 +17,19 @@
   gap: 4px;
 }
 
-#content #skills .skill-container .skill-name-container img{
+#content #skills .skill-container .skill-name-container img {
   height: 24px;
   width: 24px;
-
 }
 
 #content #skills .skill-container .skill-name-container h4 {
   margin: 0;
+}
+
+#content #skills .skill-container .skill-name-container p {
+  font-size: 16px;
+  margin-bottom: 1px;
+  margin-left: 8px;
 }
 
 #content #skills .skill-container .bar {

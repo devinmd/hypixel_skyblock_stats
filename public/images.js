@@ -11,8 +11,7 @@ let images = {
     runecrafting: "magma_cream.png",
     social: "emerald.png",
     taming: "spawn_egg.png",
-
-    dungeoneering: "gold_hoe.png",
+    dungeoneering: "dungeoneering.png",
   },
   collection: {},
 };

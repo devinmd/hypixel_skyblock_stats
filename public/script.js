@@ -15,9 +15,37 @@ var skill_levels = {};
 
 var rank;
 
+window.onload = function () {
+  let url_search_params = new URLSearchParams(window.location.search);
+  let user = url_search_params.get("u");
+  console.log(user);
+
+  if (user != null) {
+    // is a user in url provided
+    document.querySelector("#user-input").value = user;
+    requestUserData();
+  }
+
+  let page = window.location.hash;
+  console.log(page.split("#"));
+};
+
 socket.on("collections", (c) => {
   console.log("received collections");
   collections = c;
+
+  let url_search_params = new URLSearchParams(window.location.search);
+  let user = url_search_params.get("u");
+  console.log(user);
+
+  if (user != null) {
+    // is a user in url provided
+    document.querySelector("#user-input").value = user;
+    requestUserData();
+  }
+
+  let page = window.location.hash;
+  console.log(page.split("#"));
 });
 
 socket.on("skills", (s) => {
@@ -27,16 +55,27 @@ socket.on("skills", (s) => {
 
 socket.on("status", (data, user) => {
   console.log("received status for " + user.username);
+  console.log(data);
+
   if (!data.success) {
     alert("error fetching hypixel status for " + user.username);
     return;
   }
-  if (data.session.online == true) {
-    let location = data.session.mode;
+
+  if (!data.session.online) {
+    return;
+  }
+
+  location1 = data.session.mode;
+
+  if (data.session.gameType == "SKYBLOCK") {
     if (locations[data.session.mode]) {
-      location = locations[data.session.mode];
+      location1 = locations[data.session.mode];
     }
-    document.querySelector("#current-game").innerHTML = 'Location: ' + data.session.gameType + " - " + location;
+    document.querySelector("#skyblock-location").innerHTML = "Location: " + location1;
+  } else {
+    // not in skyblock
+    document.querySelector("#current-game").innerHTML = "Server: " + data.session.gameType + " - " + location1;
   }
 });
 
@@ -56,42 +95,14 @@ socket.on("network_data", (data, user) => {
   document.querySelector("#achievement-points").innerHTML =
     "Achievement Points: " + network_data.achievementPoints.toLocaleString("en");
 
-  if (network_data.prefix) {
-    rank = network_data.prefix;
-  } else if (network_data.rank && network_data.rank != "NORMAL") {
-    rank = network_data.rank;
-  } else if (network_data.monthlyPackageRank && network_data.monthlyPackageRank != "NONE") {
-    rank = network_data.monthlyPackageRank;
-  } else if (network_data.newPackageRank && network_data.newPackageRank != "NONE") {
-    rank = network_data.newPackageRank;
-  } else if (network_data.packageRank && network_data.packageRank != "NONE") {
-    rank = network_data.packageRank;
-  }
-
-  if (rank == "MVP_PLUS") {
-    rank = "MVP+";
-  }
-
-  if (rank == "YOUTUBER") {
-    rank = "YOUTUBE+";
-  }
-  if (rank == "VIP_PLUS") {
-    rank = "VIP";
-  }
-
-  if (rank == "§c[OWNER]") {
-    rank = "OWNER";
-  }
-
-  if (rank == "SUPERSTAR") {
-    rank = "MVP++";
-  }
+  let rank = getRank();
 
   if (network_data.lastLogin > network_data.lastLogout) {
     // online
     let d = new Date();
     document.querySelector("#last-session").innerHTML = `Online for ${msToTime(d.getTime() - network_data.lastLogin)}`;
   } else {
+    // offline
     document.querySelector("#last-session").innerHTML = `Last Session: ${relativeTime(
       network_data.lastLogout
     )} ago for ${msToTime(network_data.lastLogout - network_data.lastLogin)}`;
@@ -147,7 +158,7 @@ function showData() {
   document.querySelector("#collections").innerHTML = "";
   document.querySelector("#skills").innerHTML = "";
   document.querySelector("#bank").innerHTML = "Bank: 0";
-  document.querySelector("#purse").innerHTML = "Coin Purse: 0";
+  document.querySelector("#purse").innerHTML = "Purse: 0";
   document.querySelector("#fairy-souls").innerHTML = "Fairy Souls: 0";
 
   // basic info
@@ -156,7 +167,7 @@ function showData() {
   }
 
   document.querySelector("#purse").innerHTML =
-    "Coin Purse: " + abbrNum(data.profiles[selected_profile].members[uuid].coin_purse);
+    "Purse: " + abbrNum(data.profiles[selected_profile].members[uuid].coin_purse);
 
   document.querySelector("#fairy-souls").innerHTML =
     "Fairy Souls: " + abbrNum(data.profiles[selected_profile].members[uuid].fairy_souls_collected);
@@ -202,12 +213,12 @@ function showSkillsData() {
     let skill_image = document.createElement("img");
     skill_image.src = "./assets/" + images.skills[s.toLowerCase()];
     let skill_name = document.createElement("h3");
-    skill_name_container.append(skill_image, skill_name);
+    let progress = document.createElement("p");
+    progress.className = "progress";
+    skill_name_container.append(skill_image, skill_name, progress);
     let bar = document.createElement("div");
     bar.className = "bar";
     let bar_fill = document.createElement("div");
-    let progress = document.createElement("p");
-    progress.className = "progress";
 
     let amount = data.profiles[selected_profile].members[uuid][`experience_skill_${skill.name.toLowerCase()}`];
 
@@ -234,7 +245,7 @@ function showSkillsData() {
 
       progress.innerHTML = `${abbrNum(amount)} / ${abbrNum(required - last_required)}`;
 
-      bar.append(bar_fill, progress);
+      bar.append(bar_fill);
 
       if (skill.name != "Runecrafting" && skill.name != "Social")
         skill_levels[skill.name] = parseInt(l) + amount / (required - last_required);
@@ -256,6 +267,8 @@ function showSkillsData() {
   let avg = document.createElement("h3");
   avg.className = "name";
   avg.innerHTML = "Average: " + (temp / Object.keys(skill_levels).length).toFixed(2);
+  document.querySelector("#avg-skill-lvl").innerHTML =
+    "Average Skill Level: " + (temp / Object.keys(skill_levels).length).toFixed(2);
 
   avg_container.append(avg);
   document.querySelector("#skills").append(avg_container);
@@ -263,24 +276,37 @@ function showSkillsData() {
 
 function showCollectionsData() {
   if (data.profiles[selected_profile].members[uuid].collection == undefined) {
+    // no collections api
     console.log("collections api is disabled");
-    let collection_err = document.createElement("p");
-    collection_err.innerHTML = username + " has their collections API disabled";
+    let collection_err = createElement("p", { innerHTML: `${username} has their collections API disabled` });
     document.querySelector("#collections").append(collection_err);
     return;
   }
 
   for (c in collections.collections) {
-    // each category
-    let collection_title = document.createElement("h2");
-    collection_title.innerHTML = collections.collections[c].name;
+    // for each category
+    let collection_category = createElement("div", { className: "collections-category" });
+    let collection_category_title_container = createElement("button", {
+      className: "collection-category-title-container",
+    });
 
-    let collection_category = document.createElement("div");
-    collection_category.className = "category";
+    collection_category_title_container.onclick = function () {
+      collection_category.style.display = collection_category.style.display == "none" ? "grid" : "none";
+    };
+    let collection_category_image = createElement("img", {
+      src: "./assets/" + images.skills[collections.collections[c].name.toLowerCase()],
+    });
 
-    document.querySelector("#collections").append(collection_title);
+    let collection_category_title = createElement("h2", {
+      innerHTML: collections.collections[c].name,
+    });
+
+    collection_category_title_container.append(collection_category_image, collection_category_title);
+
+    document.querySelector("#collections").append(collection_category_title_container);
 
     for (i in collections.collections[c].items) {
+      // for each item in category
       let item = collections.collections[c].items[i];
       let container = document.createElement("div");
       container.className = "collection-item-container";
@@ -326,7 +352,7 @@ function showCollectionsData() {
         }
         if (collected > required && t == item.tiers.length - 1) {
           // maxed collection
-          item_name.classList.add("maxed");
+          container.classList.add("maxed");
         }
         if (collected < required && (collected >= last_required || last_required == -1)) {
           // is the current tier you're working on
@@ -367,6 +393,15 @@ function requestUserData() {
   document.querySelector("#profile-selector").innerHTML = "";
 
   document.querySelector("#input").style.display = "none";
+
+  // change url query
+
+  // Construct URLSearchParams object instance from current URL querystring.
+  var queryParams = new URLSearchParams(window.location.search);
+
+  // Set new or modify existing parameter value.
+  queryParams.set("u", user);
+  history.replaceState(null, null, "?" + queryParams.toString());
 }
 
 document.querySelector("#user-input").onkeydown = function (e) {
@@ -417,4 +452,48 @@ function msToTime(duration) {
   seconds = seconds < 10 ? "0" + seconds : seconds;
 
   return hours + ":" + minutes + ":" + seconds;
+}
+
+function getRank() {
+  let rank = "";
+  if (network_data.prefix) {
+    rank = network_data.prefix;
+  } else if (network_data.rank && network_data.rank != "NORMAL") {
+    rank = network_data.rank;
+  } else if (network_data.monthlyPackageRank && network_data.monthlyPackageRank != "NONE") {
+    rank = network_data.monthlyPackageRank;
+  } else if (network_data.newPackageRank && network_data.newPackageRank != "NONE") {
+    rank = network_data.newPackageRank;
+  } else if (network_data.packageRank && network_data.packageRank != "NONE") {
+    rank = network_data.packageRank;
+  }
+
+  if (rank == "MVP_PLUS") {
+    rank = "MVP+";
+  }
+
+  if (rank == "YOUTUBER") {
+    rank = "YOUTUBE+";
+  }
+  if (rank == "VIP_PLUS") {
+    rank = "VIP";
+  }
+
+  if (rank == "§c[OWNER]") {
+    rank = "OWNER";
+  }
+
+  if (rank == "SUPERSTAR") {
+    rank = "MVP++";
+  }
+
+  return rank;
+}
+
+function createElement(a, b = {}) {
+  let elem = document.createElement(a);
+  for (i in Object.keys(b)) {
+    elem[Object.keys(b)[i]] = b[Object.keys(b)[i]];
+  }
+  return elem;
 }

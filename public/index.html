@@ -7,11 +7,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>hypixel api</title>
-	<link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="skills.css">
-	<link rel="stylesheet" href="nav.css">
-
-
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/skills.css">
+	<link rel="stylesheet" href="css/nav.css">
+	<link rel="stylesheet" href="css/collections.css">
 
 </head>
 
@@ -20,11 +19,18 @@
 	<div id="app">
 
 		<div id="sidenav">
-
-			<p>Test</p>
 			<button>Skills</button>
-			<button>Collecions</button>
+			<button>Collections</button>
+			<button>Farming</button>
+			<button>Mining</button>
+			<button>Combat</button>
+			<button>Foraging</button>
+			<button>Fishing</button>
 			<button>Minions</button>
+			<button>Pets</button>
+			<button>Bestiary</button>
+			<button>Accessories</button>
+
 
 		</div>
 
@@ -41,38 +47,105 @@
 
 
 		<div id="content">
-			
-			<img src="assets/brewing_stand.png">
-			<p id="network-level">Network Level: 0</p>
 
-			<p id="karma">Karma: 0</p>
+			<div class="section-heading">
+				<img src="assets/compass.png">
+				<h1>Network Information</h1>
+			</div>
 
-			<img src="assets/diamond.png">
-			<p id="achievement-points">Achievement Points: 0</p>
+			<div class="small-statistic">
+				<img src="assets/brewing_stand.png">
+				<p id="network-level">Network Level:</p>
+			</div>
+
+			<div class="small-statistic">
+				<img src="assets/dye_powder_magenta.png">
+
+				<p id="karma">Karma:</p>
+			</div>
+
+			<div class="small-statistic">
+				<img src="assets/diamond.png">
+				<p id="achievement-points">Achievement Points:</p>
+			</div>
+
+			<div class="small-statistic">
+				<img src="assets/clock.png">
+
+				<p id="last-session">Last Session:</p>
+				<p id="current-game"></p>
+			</div>
 
 
-			<p id="last-session">Last Session:</p>
-			<p id="current-game"></p>
+			<div class="section-heading">
+				<img src="assets/skyblock.png">
+				<h1>Skyblock Information</h1>
+			</div>
 
-			<img src="assets/bank.png">
-			<p id="bank">Bank: 0</p>
+			<div class="small-statistic">
+				<img src="assets/bank.png">
+				<p id="bank">Bank:</p>
+			</div>
+			<div class="small-statistic">
+				<img src="assets/coin.png">
+				<p id="purse">Purse:</p>
+			</div>
 
-			<img src="assets/coin.png">
-			<p id="purse">Coin Purse: 0</p>
+			<div class="small-statistic">
+				<img src="assets/fairy_soul.png">
+				<p id="fairy-souls">Fairy Souls:</p>
+			</div>
 
-			<img src="assets/fairy_soul.png">
-			<p id="fairy-souls">Fairy Souls: 0</p>
+			<div class="small-statistic">
+				<img src="assets/diamond_sword.png">
+				<p id="avg-skill-lvl">Average Skill Level:</p>
+			</div>
 
 
-			<h1>Skills</h1>
+			<div class="small-statistic">
+				<img src="assets/private_island.png">
+				<p id="skyblock-location">Location:</p>
+			</div>
+
+
+			<div class="section-heading">
+
+				<img src="assets/diamond_sword.png">
+				<h1>Skills</h1>
+			</div>
+
 			<div id="skills"></div>
 
-			<h1>Collections</h1>
+			<div class="section-heading">
+				<img src="assets/painting.png">
+				<h1>Collections</h1>
+			</div>
 			<div id="collections"></div>
 
 
-			<h1>Minions</h1>
+			<div class="section-heading">
+				<img src="assets/cobblestone_minion_1.png">
+				<h1>Minions</h1>
+			</div>
 			<div id="minions"></div>
+
+
+			<div class="section-heading">
+				<img src="assets/bone.png">
+				<h1>Pets</h1>
+			</div>
+
+			<div class="section-heading">
+				<img src="assets/book_writable.png">
+				<h1>Bestiary</h1>
+			</div>
+
+
+			<div class="section-heading">
+				<img src="assets/accessory_bag.png">
+				<h1>Accessories</h1>
+			</div>
+
 		</div>
 	</div>
 

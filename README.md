@@ -10,15 +10,20 @@
   - skyblock level
   - dungeoneering
 
+- auctions
+- bazaar
+
+
 - base stats
 - beastiary
 - slayer
 - uuid
 - armor & wepaon
-- bazaar integration
 - url query
 
 - store json maps on backend ?
+#
+
 #
 
 made by @avvocado
