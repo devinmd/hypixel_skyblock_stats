@@ -17,11 +17,24 @@ require("dotenv").config();
 
 const key = process.env.KEY;
 
-const dev = true;
+const dev = false;
 
-// send index.html
+// host html
+
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/public/index.html");
+});
+
+app.get("/stats", function (req, res) {
+  res.sendFile(__dirname + "/public/stats.html");
+});
+
+app.get("/bz", function (req, res) {
+  res.sendFile(__dirname + "/public/bazaar.html");
+});
+
+app.get("/ah", function (req, res) {
+  res.sendFile(__dirname + "/public/auctionhouse.html");
 });
 
 // listen
@@ -36,10 +49,6 @@ io.on("connection", (socket) => {
     console.log(`(${socket.id}) left`);
   });
 
-  socket.on("request_user", (username) => {
-    fetchUser(socket, username);
-  });
-
   socket.on("request_collections", () => {
     fetchCollections(socket);
   });
@@ -47,9 +56,39 @@ io.on("connection", (socket) => {
   socket.on("request_skills", () => {
     fetchSkills(socket);
   });
+
+  socket.on("request_bazaar", () => {
+    fetchBazaar(socket);
+  });
+
+  socket.on("request_status", (uuid) => {
+    fetchBazaar(socket);
+  });
+
+  socket.on("request_network", (uuid) => {
+    fetchNetwork(socket);
+  });
+
+  socket.on("request_skyblock", (uuid) => {
+    fetchSkyblock(socket);
+  });
+
+  socket.on("request_uuid", (username) => {
+    fetchUUID(socket, username);
+  });
 });
 
-function init() {}
+async function fetchUUID(s, username) {
+  if (dev) {
+    s.emit("uuid", "000d22007fe84958a9d0c00e1d3a329e");
+  } else {
+    //
+    let response = await fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`);
+    let data = await response.json();
+    console.log(data)
+    s.emit("uuid", data);
+  }
+}
 
 function fetchSkills(s) {
   if (dev) {
@@ -122,7 +161,6 @@ function fetchUser(s, username) {
   }
 }
 
-init();
 
 // set public
 app.use(express.static(__dirname + "/public"));

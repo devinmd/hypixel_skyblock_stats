@@ -1,0 +1,46 @@
+#username.VIP,
+#username.VIP\+ {
+  color: #55ff55;
+}
+
+#username.MVP,
+#username.MVP\+ {
+  color: #55ffff;
+}
+
+#username.MVP\+\+ {
+  color: #ffaa00;
+}
+
+#username.YOUTUBE,
+#username.OWNER,
+#username.ADMIN {
+  color: #ff5555;
+}
+
+.section-heading {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.section-heading img {
+  height: 32px;
+  width: 32px;
+}
+
+.small-statistic {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+.small-statistic img {
+  height: 20px;
+  width: 20px;
+  padding-left: 8px;
+}

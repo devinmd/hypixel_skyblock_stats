@@ -1,10 +1,12 @@
 #content #skills {
   display: grid;
+  row-gap: 24px;
+  margin-top: 16px;
+  column-gap: 16px;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
 }
 
 #content #skills .skill-container {
-  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 4px;

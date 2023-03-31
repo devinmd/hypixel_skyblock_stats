@@ -7,7 +7,6 @@
 
   --text: #cfcfcf;
 
-  --sidenav-width: 180px;
   --topnav-height: 52px;
 
   --collections-min-width: 240px;
@@ -31,7 +30,7 @@ body {
   background-color: black;
 }
 
-img{
+img {
   height: 24px;
   image-rendering: auto;
   image-rendering: crisp-edges;
@@ -62,41 +61,14 @@ h1 {
 #app {
   height: 100vh;
   max-width: calc(100vw - 10px);
+  justify-content: center;
+  display: flex;
 }
 
 #content {
   padding: 64px;
-  padding-left: calc(var(--sidenav-width) + 64px);
+  padding-left: 64px;
+  width: 1400px;
   padding-top: calc(var(--topnav-height) + 32px);
-
   box-sizing: border-box;
-
-}
-
-
-.section-heading {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  align-items: center;
-  margin-top: 32px;
-
-}
-
-.section-heading img {
-  height: 32px;
-  width: 32px;
-}
-
-.small-statistic {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  margin-top: 8px;
-  align-items: center;
-}
-
-.small-statistic img {
-  height: 20px;
-  width: 20px;
 }

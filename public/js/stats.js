@@ -16,19 +16,27 @@ var skill_levels = {};
 var rank;
 
 window.onload = function () {
-  let url_search_params = new URLSearchParams(window.location.search);
-  let user = url_search_params.get("u");
-  console.log(user);
+  headings = document.querySelectorAll("h1");
 
-  if (user != null) {
-    // is a user in url provided
-    document.querySelector("#user-input").value = user;
-    requestUserData();
-  }
-
-  let page = window.location.hash;
-  console.log(page.split("#"));
+  document.addEventListener("scroll", (e) => {
+    //on scroll
+    /*	for(i in headings){
+					let h = headings[i]
+					const rect = h.getBoundingClientRect();
+      	if(rect.top > 0 && rect.top < 150) {
+        const location = window.location.toString().split('#')[0];
+ 				let oldHash = window.location.hash; 
+					if ('#' + h.name != oldHash) {  
+					//	history.replaceState(null, null, location + '#' + h.innerHTML);
+ }  
+				}
+			}*/
+  });
 };
+
+function page(p) {
+  //				history.replaceState(null, null, location + '#' + p);
+}
 
 socket.on("collections", (c) => {
   console.log("received collections");
@@ -38,14 +46,14 @@ socket.on("collections", (c) => {
   let user = url_search_params.get("u");
   console.log(user);
 
-  if (user != null) {
+  if (user != null && user.replaceAll(" ", "") != "") {
     // is a user in url provided
     document.querySelector("#user-input").value = user;
     requestUserData();
   }
 
-  let page = window.location.hash;
-  console.log(page.split("#"));
+  //let page = window.location.hash;
+  //  console.log(page.split("#"));
 });
 
 socket.on("skills", (s) => {
@@ -63,19 +71,25 @@ socket.on("status", (data, user) => {
   }
 
   if (!data.session.online) {
+    // if offline
+    document.querySelector("#skyblock-location").innerHTML = "Location: Offline";
+    document.querySelector("#current-game").innerHTML = "Server: Offline";
     return;
   }
 
   location1 = data.session.mode;
 
+  document.querySelector("#current-game").innerHTML = "Server: " + data.session.gameType + " - " + location1;
+
   if (data.session.gameType == "SKYBLOCK") {
+    // if in skyblock
     if (locations[data.session.mode]) {
       location1 = locations[data.session.mode];
     }
     document.querySelector("#skyblock-location").innerHTML = "Location: " + location1;
   } else {
     // not in skyblock
-    document.querySelector("#current-game").innerHTML = "Server: " + data.session.gameType + " - " + location1;
+    document.querySelector("#skyblock-location").innerHTML = "Location: Other Gamemode";
   }
 });
 
@@ -110,14 +124,27 @@ socket.on("network_data", (data, user) => {
 
   document.querySelector("#username").innerHTML = `${username}`;
 
-  if (rank) document.querySelector("#username").innerHTML = `[${rank}] ${username}`;
+  if (rank) {
+    document.querySelector("#username").innerHTML = `[${rank}] ${username}`;
+    document.querySelector("#username").className = rank;
+  }
 });
+socket.emit("request_uuid", "auvocado");
+
+socket.on("uuid", (data) => {
+  user = data;
+  console.log("USERNAME: " + data.name);
+  console.log("UUID: " + data.uuid);
+});
+
+
 
 socket.on("skyblock_data", (skyblock, user) => {
   // data
-
   data = skyblock;
   uuid = user.uuid;
+
+  document.querySelector("#player-head").src = "https://crafatar.com/avatars/" + uuid + "?size=32&overlay";
 
   if (data == null || data == undefined) {
     alert("error in request");
@@ -391,9 +418,6 @@ function requestUserData() {
   socket.emit("request_user", user);
   console.log(`requested data for ${user}`);
   document.querySelector("#profile-selector").innerHTML = "";
-
-  document.querySelector("#input").style.display = "none";
-
   // change url query
 
   // Construct URLSearchParams object instance from current URL querystring.
@@ -473,7 +497,7 @@ function getRank() {
   }
 
   if (rank == "YOUTUBER") {
-    rank = "YOUTUBE+";
+    rank = "YOUTUBE";
   }
   if (rank == "VIP_PLUS") {
     rank = "VIP";

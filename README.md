@@ -2,6 +2,7 @@
 
 ### to-do
 
+- hash on scroll
 - organize images
 - fix minions
 - pets
@@ -17,9 +18,13 @@
 - base stats
 - beastiary
 - slayer
-- uuid
 - armor & wepaon
-- url query
+
+
+FRONTEND QOL & LOOKS
+- mvp plus color
+- proper youtube rank color
+- show uuid
 
 - store json maps on backend ?
 #
