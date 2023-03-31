@@ -1,26 +1,25 @@
-const socket = io({ autoConnect: true });
-
-var data;
-var network_data;
-
+// user
 var username;
 var uuid;
 
-var selected_profile = -1;
-
+// skyblock
 var collections;
 var skills;
+
 var minions = {};
 var skill_levels = {};
+var selected_profile = -1;
+
+var data;
+var hypixel_data;
 
 var rank;
 
 window.onload = function () {
-  headings = document.querySelectorAll("h1");
-
-  document.addEventListener("scroll", (e) => {
-    //on scroll
-    /*	for(i in headings){
+  //headings = document.querySelectorAll("h1");
+  //document.addEventListener("scroll", (e) => {
+  //on scroll
+  /*	for(i in headings){
 					let h = headings[i]
 					const rect = h.getBoundingClientRect();
       	if(rect.top > 0 && rect.top < 150) {
@@ -31,133 +30,32 @@ window.onload = function () {
  }  
 				}
 			}*/
-  });
+  //  });
 };
 
 function page(p) {
   //				history.replaceState(null, null, location + '#' + p);
 }
 
-socket.on("collections", (c) => {
-  console.log("received collections");
-  collections = c;
 
-  let url_search_params = new URLSearchParams(window.location.search);
-  let user = url_search_params.get("u");
-  console.log(user);
 
-  if (user != null && user.replaceAll(" ", "") != "") {
-    // is a user in url provided
-    document.querySelector("#user-input").value = user;
-    requestUserData();
-  }
-
-  //let page = window.location.hash;
-  //  console.log(page.split("#"));
-});
-
-socket.on("skills", (s) => {
-  console.log("received skills");
-  skills = s;
-});
-
-socket.on("status", (data, user) => {
-  console.log("received status for " + user.username);
-  console.log(data);
+socket.on("skyblock_data", (data) => {
+  console.log(`received skyblock data`);
 
   if (!data.success) {
-    alert("error fetching hypixel status for " + user.username);
+    alert("error fetching hypixel skyblock data for " + username);
     return;
   }
 
-  if (!data.session.online) {
-    // if offline
-    document.querySelector("#skyblock-location").innerHTML = "Location: Offline";
-    document.querySelector("#current-game").innerHTML = "Server: Offline";
-    return;
-  }
-
-  location1 = data.session.mode;
-
-  document.querySelector("#current-game").innerHTML = "Server: " + data.session.gameType + " - " + location1;
-
-  if (data.session.gameType == "SKYBLOCK") {
-    // if in skyblock
-    if (locations[data.session.mode]) {
-      location1 = locations[data.session.mode];
-    }
-    document.querySelector("#skyblock-location").innerHTML = "Location: " + location1;
-  } else {
-    // not in skyblock
-    document.querySelector("#skyblock-location").innerHTML = "Location: Other Gamemode";
-  }
-});
-
-socket.on("network_data", (data, user) => {
-  if (!data.success) {
-    alert("error fetching hypixel network data for " + user.username);
-    return;
-  }
-
-  network_data = data.player;
-  username = network_data.displayname;
-
-  document.querySelector("#network-level").innerHTML =
-    "Network Level: " + (Math.sqrt(2 * network_data.networkExp + 30625) / 50 - 2.5).toFixed(2);
-
-  document.querySelector("#karma").innerHTML = "Karma: " + network_data.karma.toLocaleString("en");
-  document.querySelector("#achievement-points").innerHTML =
-    "Achievement Points: " + network_data.achievementPoints.toLocaleString("en");
-
-  let rank = getRank();
-
-  if (network_data.lastLogin > network_data.lastLogout) {
-    // online
-    let d = new Date();
-    document.querySelector("#last-session").innerHTML = `Online for ${msToTime(d.getTime() - network_data.lastLogin)}`;
-  } else {
-    // offline
-    document.querySelector("#last-session").innerHTML = `Last Session: ${relativeTime(
-      network_data.lastLogout
-    )} ago for ${msToTime(network_data.lastLogout - network_data.lastLogin)}`;
-  }
-
-  document.querySelector("#username").innerHTML = `${username}`;
-
-  if (rank) {
-    document.querySelector("#username").innerHTML = `[${rank}] ${username}`;
-    document.querySelector("#username").className = rank;
-  }
-});
-socket.emit("request_uuid", "auvocado");
-
-socket.on("uuid", (data) => {
-  user = data;
-  console.log("USERNAME: " + data.name);
-  console.log("UUID: " + data.uuid);
-});
-
-
-
-socket.on("skyblock_data", (skyblock, user) => {
   // data
-  data = skyblock;
-  uuid = user.uuid;
+  skyblock_data = data;
 
-  document.querySelector("#player-head").src = "https://crafatar.com/avatars/" + uuid + "?size=32&overlay";
+  //
 
-  if (data == null || data == undefined) {
-    alert("error in request");
-    return;
-  }
-
-  console.log(`received data for ${username}`);
-  console.log(skyblock);
-
-  if (!data.success) {
-    alert("error fetching hypixel skyblock data for " + user.username);
-    return;
-  }
+  //if (data == null || data == undefined) {
+  // alert("error in request");
+  //  // return;
+  // }
 
   if (!data.profiles) return;
 
@@ -404,28 +302,15 @@ function showCollectionsData() {
 }
 
 function init() {
+  console.log("requesting collections");
   socket.emit("request_collections");
+  console.log("requesting skills");
   socket.emit("request_skills");
 }
 
 function selectProfile() {
   selected_profile = document.querySelector("#profile-selector").value;
   showData();
-}
-
-function requestUserData() {
-  let user = document.querySelector("#user-input").value;
-  socket.emit("request_user", user);
-  console.log(`requested data for ${user}`);
-  document.querySelector("#profile-selector").innerHTML = "";
-  // change url query
-
-  // Construct URLSearchParams object instance from current URL querystring.
-  var queryParams = new URLSearchParams(window.location.search);
-
-  // Set new or modify existing parameter value.
-  queryParams.set("u", user);
-  history.replaceState(null, null, "?" + queryParams.toString());
 }
 
 document.querySelector("#user-input").onkeydown = function (e) {
@@ -480,16 +365,16 @@ function msToTime(duration) {
 
 function getRank() {
   let rank = "";
-  if (network_data.prefix) {
-    rank = network_data.prefix;
-  } else if (network_data.rank && network_data.rank != "NORMAL") {
-    rank = network_data.rank;
-  } else if (network_data.monthlyPackageRank && network_data.monthlyPackageRank != "NONE") {
-    rank = network_data.monthlyPackageRank;
-  } else if (network_data.newPackageRank && network_data.newPackageRank != "NONE") {
-    rank = network_data.newPackageRank;
-  } else if (network_data.packageRank && network_data.packageRank != "NONE") {
-    rank = network_data.packageRank;
+  if (hypixel_data.prefix) {
+    rank = hypixel_data.prefix;
+  } else if (hypixel_data.rank && hypixel_data.rank != "NORMAL") {
+    rank = hypixel_data.rank;
+  } else if (hypixel_data.monthlyPackageRank && hypixel_data.monthlyPackageRank != "NONE") {
+    rank = hypixel_data.monthlyPackageRank;
+  } else if (hypixel_data.newPackageRank && hypixel_data.newPackageRank != "NONE") {
+    rank = hypixel_data.newPackageRank;
+  } else if (hypixel_data.packageRank && hypixel_data.packageRank != "NONE") {
+    rank = hypixel_data.packageRank;
   }
 
   if (rank == "MVP_PLUS") {
