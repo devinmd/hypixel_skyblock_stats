@@ -1,0 +1,22 @@
+
+#table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+#table th {
+  text-align: left;
+}
+
+#table td {
+  padding: 4px;
+}
+
+#table tr:hover {
+  background-color: var(--dark-gray);
+}
+
+
+#table tr td:not(:first-child){
+text-align: right;
+  }

@@ -6,14 +6,14 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auction House</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/nav.css">
+  <title>Bazaar</title>
+  <link rel="stylesheet" href="../style.css">
+
+  <link rel="stylesheet" href="../bazaar/bazaar.css">
 
 </head>
 
 <body>
-
   <div id="app">
     <div id="topnav">
       <a href="/">Home</a>
@@ -21,16 +21,20 @@
       <a href="/bz">Bazaar</a>
       <a href="/ah">Auction</a>
     </div>
-
-
     <div id="content">
+
+      <p id="last-updated"></p>
+      <table id="table">
+
+      </table>
     </div>
-    
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="../bazaar/bazaar.js"></script>
+  <script src="../bazaar/bazaar_item_names.js"></script>
 
-
+  <script src="../helper.js"></script>
 
 
 </body>

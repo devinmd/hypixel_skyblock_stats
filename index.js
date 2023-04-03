@@ -26,15 +26,15 @@ app.get("/", function (req, res) {
 });
 
 app.get("/stats", function (req, res) {
-  res.sendFile(__dirname + "/public/stats.html");
+  res.sendFile(__dirname + "/public/stats/stats.html");
 });
 
 app.get("/bz", function (req, res) {
-  res.sendFile(__dirname + "/public/bazaar.html");
+  res.sendFile(__dirname + "/public/bazaar/bazaar.html");
 });
 
 app.get("/ah", function (req, res) {
-  res.sendFile(__dirname + "/public/auctionhouse.html");
+  res.sendFile(__dirname + "/public/auctions/auctions.html");
 });
 
 // listen
@@ -75,6 +75,10 @@ io.on("connection", (socket) => {
 
   socket.on("request_uuid", (username) => {
     fetchUUID(socket, username);
+  });
+
+  socket.on("request_items", () => {
+    fetchUUID(socket);
   });
 });
 
@@ -127,6 +131,20 @@ async function fetchBazaar(socket) {
     socket.emit("bazaar", data);
   }
   console.log("fetched bazaar");
+}
+
+
+async function fetchItems(socket) {
+  //if (dev) {
+    fs.readFile("./temp/items.json", "utf-8", (err, data) => {
+      socket.emit("items", JSON.parse(data));
+    });
+ // } else {
+    //let response = await fetch(`https://api.hypixel.net/skyblock/bazaar?key=${key}`);
+    //let data = await response.json();
+    //socket.emit("bazaar", data);
+ // }
+  console.log("fetched items");
 }
 
 async function fetchSkyblockData(socket, uuid) {

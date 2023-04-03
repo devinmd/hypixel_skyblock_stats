@@ -1,0 +1,6 @@
+{
+  "FARMER_BOOTS": {
+    "items": { "ENCHANTED_PUMPKIN": 256 },
+    "requirements": [{ "type": "SKILL", "skill": "FARMING", "level": 18 }]
+  }
+}
