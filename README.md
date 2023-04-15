@@ -2,43 +2,48 @@
 
 ### to-do
 
-- fix stats
+- backend
+  - organize images
 
-- ah
-  - all in game options
-  - lowest, average, & median price for selected item
-    - bz > craft > ah > profit
-  - bid tracker
-- bz
-  - crafts
-  - flips (margin)
+- frontend & qol
+  
 
+- home
+- stats
+  - ui & qol
+    - proper rank + colors
+    - proper youtube colors
+    - show uuid
+  - hash on scroll
+  - base stats
+  - sections
+    - skills
+      - add skyblock level
+      - add dungeoneering
+    - collections
+    - minions
+      - fix
+    - pets
+    - bestiary
+    - accessories
+      - accessory bag
+      - missing accessories & upgrades
+    - items
+      - armor, weapon, inventory, ender chest, 
+    - dungeons
+    - slayer
 
-- hash on scroll
-- organize images
-- fix minions
-- pets
-- dungeons
-- skills
-
-  - skyblock level
-  - dungeoneering
-
-- auctions
 - bazaar
-
-- base stats
-- beastiary
-- slayer
-- armor & wepaon
-
-FRONTEND QOL & LOOKS
-
-- mvp plus color
-- proper youtube rank color
-- show uuid
-
-- store json maps on backend ?
+  - crafts
+  - flips
+- auctions
+  - flips
+    - find lowest being sold and compare to the average price of it
+  - average price
+  - lowest price
+  - median price
+  - bz > craft > sell on ah calculator
+  - full search
 
 #
 

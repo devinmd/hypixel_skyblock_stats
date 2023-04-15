@@ -57,16 +57,19 @@ socket.on("skyblock_data", (data) => {
   //  // return;
   // }
 
-  if (!data.profiles) return;
+  if (!skyblock_data.profiles) {
+    alert(`${username} has not played skyblock`)
+    return;
+  };
 
-  for (i in data.profiles) {
+  for (i in skyblock_data.profiles) {
     // for each profile
 
-    if (data.profiles[i].game_mode == "bingo") continue;
+    if (skyblock_data.profiles[i].game_mode == "bingo") continue;
 
     let option = document.createElement("option");
     option.value = i;
-    option.text = data.profiles[i].cute_name;
+    option.text = skyblock_data.profiles[i].cute_name;
 
     document.querySelector("#profile-selector").append(option);
 
@@ -87,15 +90,15 @@ function showData() {
   document.querySelector("#fairy-souls").innerHTML = "Fairy Souls: 0";
 
   // basic info
-  if (data.profiles[selected_profile].banking) {
-    document.querySelector("#bank").innerHTML = "Bank: " + abbrNum(data.profiles[selected_profile].banking.balance);
+  if (skyblock_data.profiles[selected_profile].banking) {
+    document.querySelector("#bank").innerHTML = "Bank: " + abbrNum(skyblock_data.profiles[selected_profile].banking.balance);
   }
 
   document.querySelector("#purse").innerHTML =
-    "Purse: " + abbrNum(data.profiles[selected_profile].members[uuid].coin_purse);
+    "Purse: " + abbrNum(skyblock_data.profiles[selected_profile].members[uuid].coin_purse);
 
   document.querySelector("#fairy-souls").innerHTML =
-    "Fairy Souls: " + abbrNum(data.profiles[selected_profile].members[uuid].fairy_souls_collected);
+    "Fairy Souls: " + abbrNum(skyblock_data.profiles[selected_profile].members[uuid].fairy_souls_collected);
 
   // skills
   showSkillsData();
@@ -104,10 +107,10 @@ function showData() {
   showCollectionsData();
 
   // minions
-  for (g in data.profiles[selected_profile].members[uuid].crafted_generators) {
+  for (g in skyblock_data.profiles[selected_profile].members[uuid].crafted_generators) {
     // for every crafted minion
     // find your highest level for each minion
-    let minion = data.profiles[selected_profile].members[uuid].crafted_generators[g];
+    let minion = skyblock_data.profiles[selected_profile].members[uuid].crafted_generators[g];
     let split = minion.lastIndexOf("_");
     let tier = minion.substr(split + 1);
     let name = minion.substr(0, split);
@@ -121,7 +124,7 @@ function showData() {
     let name = document.createElement("p");
     name.innerHTML = m + " " + minions[m];
     container.append(name);
-    document.querySelector("#minions").append(container);
+  //  document.querySelector("#minions").append(container);
   }
 }
 
@@ -145,10 +148,10 @@ function showSkillsData() {
     bar.className = "bar";
     let bar_fill = document.createElement("div");
 
-    let amount = data.profiles[selected_profile].members[uuid][`experience_skill_${skill.name.toLowerCase()}`];
+    let amount = skyblock_data.profiles[selected_profile].members[uuid][`experience_skill_${skill.name.toLowerCase()}`];
 
     if (skill.name.toLowerCase() == "social")
-      amount = data.profiles[selected_profile].members[uuid][`experience_skill_social2`];
+      amount = skyblock_data.profiles[selected_profile].members[uuid][`experience_skill_social2`];
 
     for (l in skill.levels) {
       if (isNaN(amount)) amount = 0;
@@ -189,18 +192,22 @@ function showSkillsData() {
 
   let avg_container = document.createElement("div");
   avg_container.className = "skill-container";
-  let avg = document.createElement("h3");
-  avg.className = "name";
-  avg.innerHTML = "Average: " + (temp / Object.keys(skill_levels).length).toFixed(2);
+  let avg_text_container = createElement("div", {className: 'skill-name-container'});
+  let avg_img = createElement('img', {src: '../assets/diamond_sword.png'})
+  let avg_text = document.createElement('h3')
+  //avg.className = "name";
+  avg_text.innerHTML = "Average: " + (temp / Object.keys(skill_levels).length).toFixed(2);
   document.querySelector("#avg-skill-lvl").innerHTML =
     "Average Skill Level: " + (temp / Object.keys(skill_levels).length).toFixed(2);
 
-  avg_container.append(avg);
+    avg_text_container.append(avg_img,avg_text)
+
+  avg_container.append(avg_text_container);
   document.querySelector("#skills").append(avg_container);
 }
 
 function showCollectionsData() {
-  if (data.profiles[selected_profile].members[uuid].collection == undefined) {
+  if (skyblock_data.profiles[selected_profile].members[uuid].collection == undefined) {
     // no collections api
     console.log("collections api is disabled");
     let collection_err = createElement("p", { innerHTML: `${username} has their collections API disabled` });
@@ -249,7 +256,7 @@ function showCollectionsData() {
         let bar_fill = document.createElement("div");
         bar_fill.className = "bar-fill";
 
-        let collected = data.profiles[selected_profile].members[uuid].collection[i];
+        let collected = skyblock_data.profiles[selected_profile].members[uuid].collection[i];
         let required = item.tiers[t].amountRequired;
         let last_required = -1;
 

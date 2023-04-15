@@ -7,6 +7,12 @@
   row-gap: 32px;
 }
 
+@media only screen and (max-width: 600px) {
+  #content #collections .collections-category {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 #content #collections .collection-category-title-container {
   display: flex;
   flex-direction: row;
@@ -15,8 +21,8 @@
   gap: 8px;
 }
 
-#content #collections .collection-category-title-container:hover{
-outline: 2px solid var(--text);
+#content #collections .collection-category-title-container:hover {
+  outline: 2px solid var(--text);
 }
 
 #content #collections .collection-item-container {
@@ -61,7 +67,6 @@ outline: 2px solid var(--text);
 #content #collections .collection-item-container .unlocks {
   color: var(--light-gray);
   display: none;
-
 }
 
 #content #collections .collection-item-container.undiscovered .unlocks {

@@ -19,11 +19,11 @@ socket.on("bazaar", (b) => {
 
   products = b.products;
 
-  document.querySelector("#last-updated").innerHTML = `Last Updated: ${relativeTime(b.lastUpdated)} ago`;
+  document.querySelector("#last-updated").innerHTML = `Bazaar API Last Updated: ${relativeTime(b.lastUpdated)} ago`;
 
   let tr = createElement("tr", {});
   let name = createElement("th", { innerHTML: "Product" });
-  let buy = createElement("th", { innerHTML: "Instant Sell<br>Buy Order" });
+  let buy = createElement("th", { innerHTML: "Instant Sell <br>Buy Order" });
   let sell = createElement("th", { innerHTML: "Instant Buy<br>Sell Offer" });
   let profit = createElement("th", { innerHTML: "Buy / Sell Difference<br>Profit" });
   let supply = createElement("th", { innerHTML: "Items In Sell Offers<br>Supply" });
@@ -106,7 +106,7 @@ socket.on("bazaar", (b) => {
     let hourly_buy = createElement("td", { innerHTML: (week_instant_buys / 168).toFixed(2) });
     let hourly_sell = createElement("td", { innerHTML: (week_instant_sells / 168).toFixed(2) });
 
-    tr.append(name, buy, sell, profit, hourly_sell, hourly_buy, supply,demand);
+    tr.append(name, buy, sell, profit, hourly_sell, hourly_buy, supply, demand);
 
     document.querySelector("#table").append(tr);
   }

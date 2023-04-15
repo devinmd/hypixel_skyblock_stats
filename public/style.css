@@ -60,6 +60,13 @@ h1 {
   font-size: 24px;
 }
 
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
 #app {
   height: 100vh;
   max-width: calc(100vw - 10px);
@@ -73,6 +80,16 @@ h1 {
   padding-top: calc(var(--topnav-height) + 32px);
   box-sizing: border-box;
 }
+
+@media only screen and (max-width: 600px) {
+  #content {
+    padding: 8px;
+    width: var(--max-width);
+    padding-top: calc(var(--topnav-height) + 8px);
+    box-sizing: border-box;
+  }
+}
+
 .section-heading {
   display: flex;
   flex-direction: row;
@@ -88,19 +105,27 @@ h1 {
 
 #topnav {
   display: flex;
-  padding: 16px;
   height: var(--topnav-height);
-  background-color: black;
   position: fixed;
   width: 100%;
   border-bottom: 1px solid var(--text);
-  gap: 8px;
-  box-sizing: border-box;
   flex-direction: row;
+  background-color: black;
 }
 
-#topnav * {
-  height: 20px;
+#topnav a {
+  height: 100%;
+  padding: 24px;
+  display: flex;
+  transition: 20ms;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#topnav a:hover {
+  background-color: #101010;
 }
 
 #sidenav {
